@@ -1,84 +1,102 @@
 # SNAP Participation and Structural Cost Burdens Across U.S. Counties
 
-This repository contains the dataset, R script, analytical report, and presentation slides for the *IA650: Data Mining* project conducted as part of the Master of Science in Applied Data Science program at Clarkson University.  
-The project investigates how **SNAP (Supplemental Nutrition Assistance Program)** participation correlates with **county-level cost-of-living structures** across the United States, using statistical and unsupervised learning methods.
+**Author:** Mutsa Mungoshi  
+**Program:** M.S. in Applied Data Science, Clarkson University  
+**Course:** IA650 – Data Mining  
+**Date:** July 31, 2025  
 
 ---
 
-## 1. Project Overview
+## Abstract
 
-The primary research question guiding this analysis is whether SNAP participation rates reflect or reshape local cost-of-living structures.  
-The study uses county-level data incorporating SNAP participation rates, median income, metro status, and disaggregated cost shares for categories such as housing, childcare, transportation, food, and healthcare.
+This study examines whether participation in the Supplemental Nutrition Assistance Program (SNAP) reflects deeper structural affordability burdens at the county level across the United States. Beyond household poverty, SNAP participation is analyzed as a potential indicator of regional cost pressures in housing, childcare, and other essential services.  
 
-By applying dimensionality reduction and clustering methods, the project identifies latent structures in county cost patterns and evaluates how these structures relate to SNAP participation intensity.
+Using county-level data from over 3,000 U.S. counties, the analysis integrates cost-of-living estimates from the Economic Policy Institute with SNAP participation rates, median income, and metro classifications. Employing Principal Component Analysis (PCA), multivariate regression, and unsupervised clustering, the study identifies consistent associations between SNAP participation and regional cost structures. Results show that SNAP rates are systematically higher in counties with elevated housing and caregiving costs, even after controlling for income and geography.  
 
----
-
-## 2. Repository Structure
-
-SNAP/
-│
-├── data/
-│   └── data.csv
-│
-├── code/
-│   └── food_final.Rmd
-│
-├── reports/
-│   ├── SNAP_analysis_on_costs.pdf
-│   └── Group_7_Mutsa_Mungoshi_Presentation.pdf
-│
-├── README.md
-└── .gitignore      (optional, to exclude unnecessary files)
- 
----
-
-## 3. Analytical Workflow
-
-All analysis was conducted in R (version 4.3 or later) using reproducible R Markdown scripting. The workflow includes the following key stages:
-
-### 3.1 Data Preparation
-- Imported and cleaned county-level cost, income, and SNAP datasets.
-- Merged multiple data sources by county FIPS code.
-- Computed cost shares and standardized variables for comparability.
-- Handled missing values and applied log-transformations where appropriate.
-
-### 3.2 Dimensionality Reduction
-- Applied **Principal Component Analysis (PCA)** to cost-share variables to identify the main underlying dimensions of county cost structures.
-- Interpreted PCA loadings to group counties by dominant cost categories (e.g., housing-intensive vs. service-intensive regions).
-
-### 3.3 Regression Modeling
-- Conducted multiple linear regression with SNAP participation rate as the dependent variable.
-- Used PCA components as predictors to evaluate associations between cost structure composition and SNAP reliance.
-- Assessed residual diagnostics, adjusted R², and variance inflation factors (VIFs).
-
-### 3.4 Clustering and Typology
-- Implemented **k-means clustering** on PCA-transformed data to classify counties into distinct cost-structure typologies.
-- Compared SNAP participation averages across clusters.
-- Validated clusters using silhouette scores and within-cluster variance metrics.
-
-### 3.5 Visualization and Interpretation
-- Produced biplots, cluster maps, and regression diagnostic plots using `ggplot2` and `factoextra`.
-- Interpreted results in the context of socioeconomic cost burdens and regional variation.
+By positioning SNAP as a diagnostic signal of structural economic burden, the research provides a new perspective for understanding spatial inequality and for designing geographically responsive policy interventions.
 
 ---
 
-## 4. Results Summary
+## Repository Structure
 
-- PCA reduced cost-share variability into three dominant components:  
-  1. **Housing–Childcare tradeoff**  
-  2. **Food–Transportation balance**  
-  3. **Healthcare cost differentiation**
-
-- Regression analysis found statistically significant associations between SNAP participation and the first two components, indicating that counties with higher SNAP participation often exhibit higher proportions of essential-cost expenditures.
-
-- Clustering revealed identifiable regional patterns in cost structures, suggesting distinct "cost burden profiles" among urban and rural counties.
+SNAP_PROJECT/  
+│  
+├── code/ — R Markdown analysis script  
+│  └── food_final.Rmd  
+│  
+├── data/ — Cleaned dataset (county-level variables)  
+│  └── snap_data.csv  
+│  
+├── reports/ — Final report and presentation  
+│  ├── SNAP_analysis_on_costs.pdf  
+│  └── SNAP_Presentation.pdf  
+│  
+├── .gitattributes  
+├── .gitignore  
+└── README.md  
 
 ---
 
-## 5. Requirements
+## Analytical Framework
 
-This project requires R (version 4.3 or higher) and the following R packages:
+All analyses were conducted in R (version 4.3 or later) using a reproducible R Markdown workflow. The methodological sequence followed the structure below:
 
+1. **Data Integration**  
+   Merged SNAP participation data with cost-of-living estimates from the Economic Policy Institute and demographic variables from the U.S. Census and USDA.
+
+2. **Variable Construction**  
+   Computed standardized cost shares for major expenditure categories, including housing, childcare, transportation, food, healthcare, and taxes.
+
+3. **Dimensionality Reduction (PCA)**  
+   Applied Principal Component Analysis to identify latent affordability dimensions and summarize correlated cost structures.
+
+4. **Regression Analysis**  
+   Modeled relationships between SNAP participation and principal components, controlling for median income, metro classification, and state-level variation.
+
+5. **Clustering Analysis**  
+   Used k-means and hierarchical clustering to identify distinct county-level cost-of-living regimes and compared SNAP participation across them.
+
+6. **Validation and Visualization**  
+   Performed statistical validation through ANOVA, chi-square, and silhouette analyses, and visualized results through biplots, scree plots, and geographic maps.
+
+---
+
+## Key Findings
+
+### Principal Components
+| Component | Interpretation | Variance Explained |
+|------------|----------------|--------------------|
+| PC1 | General Cost Burden – high across all expenditure categories | 56.7% |
+| PC2 | Care vs. Housing Tradeoff – childcare and food versus housing and transport | 17.1% |
+| PC3 | Tax-Centric Residual – variation primarily driven by tax burdens | 10.8% |
+
+### Regression Insights
+- SNAP participation is significantly associated with PC1 and PC2, confirming strong links between program reliance and essential cost intensity.  
+- The adjusted R² of approximately 0.61 indicates moderate explanatory power.  
+- Variance inflation factors (GVIF) remained below 2.5 for all predictors, confirming minimal multicollinearity.
+
+### Clustering Results
+- The optimal cluster number was determined to be **k = 4** using silhouette and gap statistics.  
+- Urban counties exhibited higher housing and childcare costs, while rural clusters emphasized food and transportation burdens.  
+- ANOVA confirmed statistically significant variation in SNAP participation across cluster profiles (*p* < 0.001).
+
+---
+
+## Reproducibility
+
+To reproduce the analysis locally:
+
+1. Clone this repository:
+git clone https://github.com/mungsmj/SNAP_PROJECT.git
+cd SNAP_PROJECT
+
+2. Open `code/food_final.Rmd` in RStudio.  
+
+3. Knit the document to generate the full analytical report.
+
+Install the required R packages prior to execution:
 ```r
-install.packages(c("tidyverse", "ggplot2", "factoextra", "cluster", "readr", "dplyr"))
+install.packages(c(
+"tidyverse", "ggplot2", "factoextra", "cluster",
+"readr", "dplyr", "car", "sandwich"
+))
